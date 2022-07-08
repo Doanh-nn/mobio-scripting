@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tag-app-api-deployment
+  labels:
+    app: tag-app-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tag-app-api
+  template:
+    metadata:
+      labels:
+        app: tag-app-api
+    spec:
+      containers:
+        - name: tag
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $TAG_HOME; sh prepare_env.sh && uwsgi --http :11240 --wsgi-file app_main.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          ports:
+            - containerPort: 11240
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          livenessProbe:
+            httpGet:
+              port: 11240
+              path: /tag/api/v1.0/ping
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 4
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tag-app-api-service
+  labels:
+    app: tag-app-api
+spec:
+  ports:
+    - name: old
+      port: 11240
+    - name: new
+      port: 80
+      protocol: TCP
+      targetPort: 11240
+  selector:
+    app: tag-app-api

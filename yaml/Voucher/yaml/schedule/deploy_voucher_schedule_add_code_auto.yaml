@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voucher-schedule-add-code-auto-deployment
+  labels:
+    app: voucher-schedule-add-code-auto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voucher-schedule-add-code-auto
+  template:
+    metadata:
+      labels:
+        app: voucher-schedule-add-code-auto
+    spec:
+      containers:
+        - name: voucher
+          image: {image}
+          imagePullPolicy: Always
+          command: [ "/bin/sh", "-c" ]
+          args: [ "cd $VOUCHER_HOME; sh prepare_env.sh && python3.8 -u voucher_schedule_add_code_auto.py" ]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc

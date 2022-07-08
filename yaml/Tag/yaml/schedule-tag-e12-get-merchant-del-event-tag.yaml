@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tag-schedule-tag-e12-get-merchant-del-event-tag-deployment
+  labels:
+    app: tag-schedule-tag-e12-get-merchant-del-event-tag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tag-schedule-tag-e12-get-merchant-del-event-tag
+  template:
+    metadata:
+      labels:
+        app: tag-schedule-tag-e12-get-merchant-del-event-tag
+    spec:
+      containers:
+        - name: tag
+          imagePullPolicy: Always
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $TAG_HOME; sh prepare_env.sh && python3.8 -u k8s_start_scheduler.py tag-e12-get-merchant-del-event-tag"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+    

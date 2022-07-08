@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marketing-app-callback-deployment
+  labels:
+    app: marketing-app-callback
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: marketing-app-callback
+  template:
+    metadata:
+      labels:
+        app: marketing-app-callback
+    spec:
+      containers:
+        - name: marketingv3
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $MARKETING_HOME; sh prepare_env.sh && uwsgi --http :11062 --wsgi-file app_marketing_callback.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          ports:
+            - containerPort: 11062
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          livenessProbe:
+            httpGet:
+              port: 11062
+              path: /api/v1.0/ping
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 4
+            successThreshold: 1
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: marketing-app-callback-service
+  labels:
+    app: marketing-app-callback
+spec:
+  clusterIP: None
+  ports:
+    - port: 11062
+  selector:
+    app: marketing-app-callback

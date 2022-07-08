@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: landingpage-app-web-deployment
+ labels:
+   app: landingpage-app-web
+spec:
+ replicas: 2
+ selector:
+   matchLabels:
+     app: landingpage-app-web
+ template:
+   metadata:
+     labels:
+       app: landingpage-app-web
+   spec:
+     containers:
+       - name: landingpage
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $LANDINGPAGE_HOME; sh prepare_env.sh && uwsgi --http :11151 --wsgi-file app_web_landingpage.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         ports:
+           - containerPort: 11151
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+         livenessProbe:
+           httpGet:
+             port: 11151
+             path: /pages/api/v1.0/ping
+           initialDelaySeconds: 120
+           periodSeconds: 5
+           timeoutSeconds: 4
+           failureThreshold: 3
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: landingpage-app-web-service
+ labels:
+   app: landingpage-app-web
+spec:
+ ports:
+   - name: old
+     port: 11151
+   - name: new
+     port: 80
+     protocol: TCP
+     targetPort: 11151
+ selector:
+   app: landingpage-app-web

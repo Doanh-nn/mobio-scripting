@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: monitor-system-schedule-export-information-system-deployment
+ labels:
+   app: monitor-system-schedule-export-information-system
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: monitor-system-schedule-export-information-system
+ template:
+   metadata:
+     labels:
+       app: monitor-system-schedule-export-information-system
+   spec:
+     containers:
+       - name: sale
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $MONITORKAFKA_HOME; sh prepare_env.sh && python3.8 -u start_schedule.py monitor-system-schedule-export-information-system"]
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+           - name: mobio-public-shared-data
+             mountPath: /media/data/public_resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
+       - name: mobio-public-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-public-resources-pvc

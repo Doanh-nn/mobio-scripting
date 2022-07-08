@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wp-web-push-api-partner-deployment
+  labels:
+    app: wp-web-push-api-partner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wp-web-push-api-partner
+  template:
+    metadata:
+      labels:
+        app: wp-web-push-api-partner
+    spec:
+      containers:
+        - name: wp-web-push-api-partner
+          image: {image}
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args: ["cd $WEB_PUSH_API; sh prepare_env.sh && uwsgi --http :11181 --wsgi-file app_partner.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+            - secretRef:
+                name: mobio-secret
+          ports:
+            - containerPort: 11181
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          livenessProbe:
+            httpGet:
+              port: 11181
+              path: /api/v1.0/ping
+            initialDelaySeconds: 120
+            periodSeconds: 5
+            timeoutSeconds: 4
+            successThreshold: 1
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wp-web-push-api-partner-services
+  labels:
+    app: wp-web-push-api-partner
+spec:
+  ports:
+    - name: old
+      port: 11181
+    - name: new
+      port: 81
+      protocol: TCP
+      targetPort: 11181
+  selector:
+    app: wp-web-push-api-partner

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcc-merchant-scheduler-job-schedule-import-group-deployment
+  labels:
+    app: mcc-merchant-scheduler-job-schedule-import-group
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcc-merchant-scheduler-job-schedule-import-group
+  template:
+    metadata:
+      labels:
+        app: mcc-merchant-scheduler-job-schedule-import-group
+    spec:
+      containers:
+        - name: mcc-merchant
+          imagePullPolicy: Always
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $MCC_MERCHANT_HOME; sh prepare_env.sh && python3.8 -u job_scheduler_services.py job-schedule-import-group 1"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+            - name: mobio-public-shared-data
+              mountPath: /media/data/public_resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+        - name: mobio-public-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-public-resources-pvc
+    

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: loyalty-scheduler-retry-api-tenant-deployment
+ labels:
+   app: loyalty-scheduler-retry-api-tenant
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: loyalty-scheduler-retry-api-tenant
+ template:
+   metadata:
+     labels:
+       app: loyalty-scheduler-retry-api-tenant
+   spec:
+     containers:
+       - name: loyalty
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $LOYALTY_HOME; sh prepare_env.sh && python3.5 -u loyalty_schedule_service.py loyalty_retry_api_tenant_scheduler"]
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc

@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: mobio-template-app-api-deployment
+ labels:
+   app: mobio-template-app-api
+spec:
+ replicas: 2
+ selector:
+   matchLabels:
+     app: mobio-template-app-api
+ template:
+   metadata:
+     labels:
+       app: mobio-template-app-api
+   spec:
+     containers:
+       - name: mobio-template
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $MOBIO_TEMPLATE_HOME; sh prepare_env.sh && uwsgi --http :80 --wsgi-file app_mobio_template_api.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads -l 100"]
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+           - secretRef:
+               name: mobio-secret
+         ports:
+           - containerPort: 80
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+           - name: mobio-public-shared-data
+             mountPath: /media/data/public_resources/
+         livenessProbe:
+           httpGet:
+             port: 80
+             path: /template/api/v1.0/ping
+           initialDelaySeconds: 120
+           periodSeconds: 5
+           timeoutSeconds: 4
+           failureThreshold: 3
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
+       - name: mobio-public-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-public-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: mobio-template-app-api-service
+ labels:
+   app: mobio-template-app-api
+spec:
+ ports:
+   - port: 80
+ selector:
+   app: mobio-template-app-api

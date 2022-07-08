@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profile-factory-consumer-scheduler-message-deployment
+  labels:
+    app: profile-factory-consumer-scheduler-message
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: profile-factory-consumer-scheduler-message
+  template:
+    metadata:
+      labels:
+        app: profile-factory-consumer-scheduler-message
+    spec:
+      containers:
+        - name: profile-factory
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $FACTORY_HOME; sh prepare_env.sh && PYTHONPATH=./ python3.5 -u run_consumer/factory_consumer_scheduler_message.py -r 1"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+            - secretRef:
+               name: mobio-secret
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/bash
+          #       - -c
+          #       - ps -ef | grep run_consumer/factory_consumer_scheduler_message.py | grep -v grep
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+    

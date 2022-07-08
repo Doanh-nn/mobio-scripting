@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: media-delete-file-in-folder-deployment
+ labels:
+   app: media-delete-file-in-folder
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: media-delete-file-in-folder
+ template:
+   metadata:
+     labels:
+       app: media-delete-file-in-folder
+   spec:
+     containers:
+       - name: media
+         image: {image}
+         command: ["/bin/sh", "-c"]
+         args: ["cd $MEDIA_HOME; sh prepare_env.sh && python3.8 -u start_consumers.py delete_file_in_folder"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+           - name: mobio-public-shared-data
+             mountPath: /media/data/public_resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
+       - name: mobio-public-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-public-resources-pvc
+

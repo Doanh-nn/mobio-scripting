@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: monitor-system-app-api-deployment
+ labels:
+   app: monitor-system-app-api
+spec:
+ replicas: 2
+ selector:
+   matchLabels:
+     app: monitor-system-app-api
+ template:
+   metadata:
+     labels:
+       app: monitor-system-app-api
+   spec:
+     containers:
+       - name: monitor-system
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $MONITORKAFKA_HOME; sh prepare_env.sh && uwsgi --http :80 --wsgi-file app_monitor_kafka_api.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads -l 100"]
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         ports:
+           - containerPort: 80
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 1000m
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+           - name: mobio-public-shared-data
+             mountPath: /media/data/public_resources/
+         livenessProbe:
+           httpGet:
+             port: 80
+             path: /monitor/api/v1.0/ping
+           initialDelaySeconds: 5
+           periodSeconds: 5
+           timeoutSeconds: 4
+           failureThreshold: 3
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
+       - name: mobio-public-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-public-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: monitor-system-app-api-service
+ labels:
+   app: monitor-system-app-api
+spec:
+ ports:
+   - port: 80
+ selector:
+   app: monitor-system-app-api

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profile-scan-filter-jb-scheduler-deployment
+  labels:
+    app: profile-scan-filter-jb-scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: profile-scan-filter-jb-scheduler
+  template:
+    metadata:
+      labels:
+        app: profile-scan-filter-jb-scheduler
+    spec:
+      containers:
+        - name: profile-scan
+          imagePullPolicy: Always
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $PROFILE_SCAN_HOME; sh prepare_env.sh && python3.8 -u schedule_services.py profile-scan-filter-jb-scheduler"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+    

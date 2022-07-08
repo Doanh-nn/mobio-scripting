@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dnc-app-api-deployment
+  labels:
+    app: dnc-app-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dnc-app-api
+  template:
+    metadata:
+      labels:
+        app: dnc-app-api
+    spec:
+      containers:
+        - name: dnc
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $DONOTCALL_HOME; sh prepare_env.sh && uwsgi --http :11210 --wsgi-file app_main.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+            - secretRef:
+                name: mobio-secret
+          ports:
+            - containerPort: 11210
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          livenessProbe:
+            httpGet:
+              port: 11210
+              path: /dnc/api/v1.0/ping
+            initialDelaySeconds: 120
+            periodSeconds: 5
+            timeoutSeconds: 4
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dnc-app-api-service
+  labels:
+    app: dnc-app-api
+spec:
+  ports:
+    - name: old
+      port: 11210
+    - name: new
+      port: 80
+      protocol: TCP
+      targetPort: 11210
+  selector:
+    app: dnc-app-api

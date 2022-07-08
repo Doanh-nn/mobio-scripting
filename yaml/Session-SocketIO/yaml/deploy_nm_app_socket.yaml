@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nm-app-socket-deployment
+  labels:
+    app: nm-app-socket
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nm-app-socket
+  template:
+    metadata:
+      labels:
+        app: nm-app-socket
+    spec:
+      containers:
+        - name: nm
+          image: {image}
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args: ["cd SESSION_SOCKETIO_HOME; sh prepare_env.sh && node index.js"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          ports:
+            - containerPort: 11070
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nm-app-socket-service
+  labels:
+    app: nm-app-socket
+spec:
+  ports:
+    - port: 11070
+  selector:
+    app: nm-app-socket

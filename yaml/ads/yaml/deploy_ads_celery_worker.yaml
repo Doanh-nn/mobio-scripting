@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ads-celery-worker-deployment
+  labels:
+    app: ads-celery-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ads-celery-worker
+  template:
+    metadata:
+      labels:
+        app: ads-celery-worker
+    spec:
+      containers:
+        - name: ads-celery-worker
+          image: {image}
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args: ["cd $ADS_AUTOMATION_HOME; sh prepare_env.sh && celery -A ads_celery_main worker -l info --pidfile=cleryworker.pid"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc

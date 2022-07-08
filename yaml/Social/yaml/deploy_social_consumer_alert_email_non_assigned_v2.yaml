@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: social-consumer-alert-email-non-assigned-deploy
+ labels:
+   app: social-consumer-alert-email-non-assigned
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: social-consumer-alert-email-non-assigned
+ template:
+   metadata:
+     labels:
+       app: social-consumer-alert-email-non-assigned
+   spec:
+     containers:
+       - name: social
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $SOCIAL_HOME; sh prepare_env.sh && python3.5 -u social_alert_email_non_assigned_v2_consumer.py"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: social-app-api-deploy
+ labels:
+   app: social-app-api
+spec:
+ replicas: 2
+ selector:
+   matchLabels:
+     app: social-app-api
+ template:
+   metadata:
+     labels:
+       app: social-app-api
+   spec:
+     containers:
+       - name: social
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $SOCIAL_HOME; sh prepare_env.sh && uwsgi --http :11110 --wsgi-file app_social.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         ports:
+           - containerPort: 11110
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+         livenessProbe:
+           httpGet:
+             port: 11110
+             path: /api/v1.0/ping
+           initialDelaySeconds: 5
+           periodSeconds: 5
+           timeoutSeconds: 4
+           successThreshold: 1
+           failureThreshold: 3
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: social-api-app-service
+ labels:
+   app: social-app-api
+spec:
+ ports:
+   - port: 11110
+     name: old
+   - port: 80
+     name: new
+     protocol: TCP
+     targetPort: 11110
+ selector:
+   app: social-app-api

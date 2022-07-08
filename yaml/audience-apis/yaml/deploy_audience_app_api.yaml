@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audience-app-api-deployment
+  labels:
+    app: audience-app-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: audience-app-api
+  template:
+    metadata:
+      labels:
+        app: audience-app-api
+    spec:
+      containers:
+        - name: audience
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $AUDIENCE_HOME; sh prepare_env.sh && uwsgi --http :11020 --wsgi-file app_audience.py --callable app --master --processes 1 -b 65536 --lazy --enable-threads -l 100"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+            - secretRef:
+                name: mobio-secret
+          ports:
+            - containerPort: 11020
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          livenessProbe:
+            httpGet:
+              port: 11020
+              path: /api/v1.0/ping
+            initialDelaySeconds: 120
+            periodSeconds: 5
+            timeoutSeconds: 4
+            successThreshold: 1
+            failureThreshold: 3
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: audience-app-api-service
+  labels:
+    app: audience-app-api
+spec:
+  ports:
+    - name: old
+      port: 11020
+    - name: new
+      port: 80
+      protocol: TCP
+      targetPort: 11020
+  selector:
+    app: audience-app-api

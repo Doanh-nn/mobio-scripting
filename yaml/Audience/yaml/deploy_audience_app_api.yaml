@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audience-v2-app-api-deployment
+  labels:
+    app: audience-v2-app-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audience-v2-app-api
+  template:
+    metadata:
+      labels:
+        app: audience-v2-app-api
+    spec:
+      containers:
+        - name: audience
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $AUDIENCE_HOME; sh prepare_env.sh && python3.8 -m uvicorn app_audience:app --host 0.0.0.0 --port 11021 --workers 4"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          ports:
+            - containerPort: 11021
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          readinessProbe:
+            httpGet:
+              port: 11021
+              path: /audience/api/v2.0/ping
+            initialDelaySeconds: 1
+            periodSeconds: 5
+            timeoutSeconds: 4
+            successThreshold: 2
+            failureThreshold: 3
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: audience-v2-app-api-service
+  labels:
+    app: audience-v2-app-api
+spec:
+  ports:
+    - name: old
+      port: 11021
+    - name: new
+      port: 80
+      protocol: TCP
+      targetPort: 11021
+  selector:
+    app: audience-v2-app-api

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nm-consumer-sent-zalo-deployment
+  labels:
+    app: nm-consumer-sent-zalo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nm-consumer-sent-zalo
+  template:
+    metadata:
+      labels:
+        app: nm-consumer-sent-zalo
+    spec:
+      containers:
+        - name: nm
+          image: {image}
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args: ["cd $NOTIFY_MANAGER_V2; sh prepare_env.sh && python3.8 -u nm_consumer_services.py v2_nm_zalo 1"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc

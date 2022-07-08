@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audience-scheduler-deployment
+  labels:
+    app: audience-scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audience-scheduler
+  template:
+    metadata:
+      labels:
+        app: audience-scheduler
+    spec:
+      containers:
+        - name: audience
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $AUDIENCE_HOME; sh prepare_env.sh && python3.5 -u schedule_audience_services.py"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc

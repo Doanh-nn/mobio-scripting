@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: survey-submit-deployment
+  labels:
+    app: survey-submit-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: survey-submit-consumer
+  template:
+    metadata:
+      labels:
+        app: survey-submit-consumer
+    spec:
+      containers:
+        - name: survey
+          image: {image}
+          command: [ "/bin/sh", "-c" ]
+          args: [ "cd $SURVEY_FOLDER_NAME; sh prepare_env.sh && python3.8 -u start_save_submit_answer_survey_v2.py" ]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+            - name: mobio-public-shared-data
+              mountPath: /media/data/public_resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+        - name: mobio-public-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-public-resources-pvc

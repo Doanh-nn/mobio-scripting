@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ads-app-api-deployment
+  labels:
+    app: ads-app-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ads-app-api
+  template:
+    metadata:
+      labels:
+        app: ads-app-api
+    spec:
+      containers:
+        - name: ads
+          image: {image}
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args: ["cd $ADS_AUTOMATION_HOME; sh prepare_env.sh && python3.8 -u script_update_database.py && uwsgi --http :11010 --wsgi-file ads_automation.py --disable-logging --callable app --master --processes 1 -b 65536 --lazy --enable-threads"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          ports:
+            - containerPort: 11010
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ads-app-api-service
+  labels:
+    app: ads-app-api
+spec:
+  clusterIP: None
+  ports:
+    - name: old
+      port: 11010
+    - name: new
+      port: 80
+      targetPort: 11010
+  selector:
+    app: ads-app-api

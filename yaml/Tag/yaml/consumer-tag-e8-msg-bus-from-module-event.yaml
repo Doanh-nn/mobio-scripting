@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tag-consumer-tag-e8-msg-bus-from-module-event-deployment
+  labels:
+    app: tag-consumer-tag-e8-msg-bus-from-module-event
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tag-consumer-tag-e8-msg-bus-from-module-event
+  template:
+    metadata:
+      labels:
+        app: tag-consumer-tag-e8-msg-bus-from-module-event
+    spec:
+      containers:
+        - name: tag
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $TAG_HOME; sh prepare_env.sh && python3.8 -u k8s_consumer_start.py tag-e8-msg-bus-from-module-event"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+    

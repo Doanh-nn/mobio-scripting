@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: journey-consumer-jb-process-send-experiment-message-cmd-deployment
+  labels:
+    app: journey-consumer-jb-process-send-experiment-message-cmd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: journey-consumer-jb-process-send-experiment-message-cmd
+  template:
+    metadata:
+      labels:
+        app: journey-consumer-jb-process-send-experiment-message-cmd
+    spec:
+      containers:
+        - name: journey
+          imagePullPolicy: Always
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $JOURNEY_HOME; sh prepare_env.sh && python3.8 -u jb_consumer_services.py jb-process-send-experiment-message-cmd 1"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+    

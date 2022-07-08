@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: admin-consumer-get-total-campaign-deployment
+ labels:
+   app: admin-consumer-get-total-campaign
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: admin-consumer-get-total-campaign
+ template:
+   metadata:
+     labels:
+       app: admin-consumer-get-total-campaign
+   spec:
+     containers:
+       - name: admin
+         image: {image}
+         command: ["/bin/sh", "-c"]
+         args: ["cd $ADMIN_HOME; sh prepare_env.sh && python3.8 -u admin_get_total_campaign.py"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+           - secretRef:
+               name: mobio-secret
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc

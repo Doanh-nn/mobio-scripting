@@ -1,0 +1,25 @@
+
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  namespace: mobio
+  name: profiling-v4-consumer-jb-update-status-event-scaledobject
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: profiling-v4-consumer-jb-update-status-event-deployment
+  pollingInterval: 30
+  cooldownPeriod: 300
+  maxReplicaCount: 2
+  minReplicaCount: 1
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: kafka1:9092,kafka2:9092,kafka3:9092
+        consumerGroup: mobio-profiling-consumer-jb
+        topic: jb-update-status-event
+        lagThreshold: '1000'
+        offsetResetPolicy: latest
+        allowIdleConsumers: 'true'
+        version: 2.1.1
+    

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nm-app-webhook-deployment
+  labels:
+    app: nm-app-webhook
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nm-app-webhook
+  template:
+    metadata:
+      labels:
+        app: nm-app-webhook
+    spec:
+      containers:
+        - name: nm
+          image: {image}
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args: ["cd $NOTIFY_MANAGER_V2; sh prepare_env.sh && uwsgi --http :11072 --wsgi-file nm_webhook_app.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          ports:
+            - containerPort: 11072
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          livenessProbe:
+            httpGet:
+              port: 11072
+              path: /api/v1.0/ping
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 4
+            successThreshold: 1
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nm-app-webhook-service
+  labels:
+    app: nm-app-webhook
+spec:
+  ports:
+    - name: old
+      port: 11072
+    - name: new
+      port: 80
+      protocol: TCP
+      targetPort: 11072
+  selector:
+    app: nm-app-webhook

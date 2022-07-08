@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profiling-v4-schedule-jb-profile-filter-register-deployment
+  labels:
+    app: profiling-v4-schedule-jb-profile-filter-register
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: profiling-v4-schedule-jb-profile-filter-register
+  template:
+    metadata:
+      labels:
+        app: profiling-v4-schedule-jb-profile-filter-register
+    spec:
+      containers:
+        - name: profiling-v4
+          imagePullPolicy: Always
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $PROFILING_V4; sh prepare_env.sh && python3.5 -u start_profile_scheduler_v2.py jb-profile-filter-register"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+            - secretRef:
+               name: mobio-secret
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/bash
+          #       - -c
+          #       - ps -ef | grep start_profile_scheduler_v2.py | grep -v grep
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+    

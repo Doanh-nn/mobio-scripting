@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: social-consumer-samsung-export-excel-comment-deploy
+ labels:
+   app: social-consumer-samsung-export-excel-comment
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: social-consumer-samsung-export-excel-comment
+ template:
+   metadata:
+     labels:
+       app: social-consumer-samsung-export-excel-comment
+   spec:
+     containers:
+       - name: social
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $SOCIAL_HOME; sh prepare_env.sh && python3.5 -u social_samsung_export_excel_comment_v2_consumer.py"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc

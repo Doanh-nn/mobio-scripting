@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jb-etl-gen-event-by-itr-nodes-cmd-csm-deployment
+  labels:
+    app: jb-etl-gen-event-by-itr-nodes-cmd-csm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jb-etl-gen-event-by-itr-nodes-cmd-csm
+  template:
+    metadata:
+      labels:
+        app: jb-etl-gen-event-by-itr-nodes-cmd-csm
+    spec:
+      containers:
+        - name: jb-etl-csm
+          imagePullPolicy: Always
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $JB_ETL_HOME; sh prepare_env.sh && python3.8 -u jb_etl_consumer_services.py jb-etl-gen-event-by-itr-nodes-cmd 1"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+    

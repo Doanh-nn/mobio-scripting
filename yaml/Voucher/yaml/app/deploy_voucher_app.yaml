@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: voucher-app-deployment
+ labels:
+   app: voucher-app
+spec:
+ replicas: 2
+ selector:
+   matchLabels:
+     app: voucher-app
+ template:
+   metadata:
+     labels:
+       app: voucher-app
+   spec:
+     containers:
+       - name: voucher
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $VOUCHER_HOME; sh prepare_env.sh && uwsgi --http :11200 --wsgi-file voucher_app.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads -l 100"]
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         ports:
+           - containerPort: 11200
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+           - name: mobio-public-shared-data
+             mountPath: /media/data/public_resources/
+         livenessProbe:
+           httpGet:
+             path: /api/v1.0/ping
+             port: 11200
+           initialDelaySeconds: 5
+           periodSeconds: 5
+           timeoutSeconds: 4
+           failureThreshold: 3
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
+       - name: mobio-public-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-public-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: voucher-app-service
+ labels:
+   app: voucher-app
+spec:
+ clusterIP: None
+ ports:
+   - port: 11200
+ selector:
+   app: voucher-app

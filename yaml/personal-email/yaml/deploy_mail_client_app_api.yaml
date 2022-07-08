@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: mail-client-app-api-deployment
+ labels:
+   app: mail-client-app-api
+spec:
+ replicas: 2
+ selector:
+   matchLabels:
+     app: mail-client-app-api
+ template:
+   metadata:
+     labels:
+       app: mail-client-app-api
+   spec:
+     containers:
+       - name: mail-client
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $PERSONAL_MAIL_HOME; sh prepare_env.sh && uwsgi --http :80 --wsgi-file app_api.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads -l 100"]
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         ports:
+           - containerPort: 80
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+           - name: mobio-public-shared-data
+             mountPath: /media/data/public_resources/
+         livenessProbe:
+           httpGet:
+             port: 80
+             path: /api/v1.0/ping
+           initialDelaySeconds: 5
+           periodSeconds: 5
+           timeoutSeconds: 4
+           failureThreshold: 3
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
+       - name: mobio-public-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-public-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: mail-client-app-api-service
+ labels:
+   app: mail-client-app-api
+spec:
+ clusterIP: None
+ ports:
+   - port: 80
+ selector:
+   app: mail-client-app-api

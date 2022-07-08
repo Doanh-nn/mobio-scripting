@@ -1,0 +1,25 @@
+
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  namespace: mobio
+  name: profiling-v4-consumer-vib-sync-balance-scaledobject
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: profiling-v4-consumer-vib-sync-balance-deployment
+  pollingInterval: 30
+  cooldownPeriod: 300
+  maxReplicaCount: 4
+  minReplicaCount: 1
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: kafka1:9092,kafka2:9092,kafka3:9092
+        consumerGroup: mobio-profiling-consumer-bank
+        topic: vib-sync-balance
+        lagThreshold: '1000'
+        offsetResetPolicy: latest
+        allowIdleConsumers: 'true'
+        version: 2.1.1
+    

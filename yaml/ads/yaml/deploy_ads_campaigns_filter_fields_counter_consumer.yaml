@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ads-campaigns-filter-fields-counter-consumer-deployment
+  labels:
+    app: ads-campaigns-filter-fields-counter-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ads-campaigns-filter-fields-counter-consumer
+  template:
+    metadata:
+      labels:
+        app: ads-campaigns-filter-fields-counter-consumer
+    spec:
+      containers:
+        - name: ads
+          image: {image}
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args: ["cd $ADS_AUTOMATION_HOME; sh prepare_env.sh && python3.8 -u ads_campaigns_filter_fields_counter_consumer.py"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc

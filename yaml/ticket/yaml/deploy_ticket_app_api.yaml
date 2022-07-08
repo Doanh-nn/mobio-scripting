@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticket-app-api-deployment
+  labels:
+    app: ticket-app-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ticket-app-api
+  template:
+    metadata:
+      labels:
+        app: ticket-app-api
+    spec:
+      containers:
+        - name: ticket
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $TICKET_HOME; sh prepare_env.sh && uwsgi --http :11120 --wsgi-file app_ticket.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+          ports:
+            - containerPort: 11120
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+            - name: mobio-public-shared-data
+              mountPath: /media/data/public_resources/
+          livenessProbe:
+            httpGet:
+              port: 11120
+              path: /ticket/api/v1.0/ping
+            initialDelaySeconds: 1
+            periodSeconds: 5
+            timeoutSeconds: 4
+            successThreshold: 1
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+        - name: mobio-public-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-public-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticket-app-api-service
+  labels:
+    app: ticket-app-api
+spec:
+  ports:
+    - name: old
+      port: 11120
+    - name: new
+      port: 80
+      targetPort: 11120
+  selector:
+    app: ticket-app-api

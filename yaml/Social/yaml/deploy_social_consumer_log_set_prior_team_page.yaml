@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: social-consumer-log-set-prior-team-page-deploy
+ labels:
+   app: social-consumer-log-set-prior-team-page
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: social-consumer-log-set-prior-team-page
+ template:
+   metadata:
+     labels:
+       app: social-consumer-log-set-prior-team-page
+   spec:
+     containers:
+       - name: social
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $SOCIAL_HOME; sh prepare_env.sh && python3.5 -u social_log_set_prior_team_page.py"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc

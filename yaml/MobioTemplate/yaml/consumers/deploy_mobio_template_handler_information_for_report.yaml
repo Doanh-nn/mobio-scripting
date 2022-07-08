@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: mobio-template-handler-information-for-report-deployment
+ labels:
+   app: mobio-template-handler-information-for-report
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: mobio-template-handler-information-for-report
+ template:
+   metadata:
+     labels:
+       app: mobio-template-handler-information-for-report
+   spec:
+     containers:
+       - name: note
+         image: {image}
+         imagePullPolicy: Always
+         command: ["/bin/sh", "-c"]
+         args: ["cd $MOBIO_TEMPLATE_HOME; sh prepare_env.sh && python3.8 -u start_consumers.py mobio-template-handler-information-for-report"]
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+           - name: mobio-public-shared-data
+             mountPath: /media/data/public_resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
+       - name: mobio-public-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-public-resources-pvc
