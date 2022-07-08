@@ -9,7 +9,8 @@ stages:
   jobs:
   - job: Init
     steps:
-    - bash: | 
+    - bash: |
+        chmod +x script-download-images.sh
         ./script-download-images.sh	
       displayName: 'Run pull images script'
     
@@ -20,5 +21,6 @@ stages:
       displayName: 'Login ACR'
     
     - bash: |
+        chmod +x script-push-images.sh
         ./script-push-images.sh
       displayName: 'Run push images script'
