@@ -1,0 +1,12 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+pool:
+  name	: azure-hk-agentpool-prod-prv-001
+
+steps:
+- script: |
+    ./script-download-images.sh	
+  displayName: 'Run a bash script'
