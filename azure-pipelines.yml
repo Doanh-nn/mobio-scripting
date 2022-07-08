@@ -8,5 +8,6 @@ pool:
 
 steps:
 - script: |
+    chmod +x script-download-images.sh 
     ./script-download-images.sh	
   displayName: 'Run a bash script'
