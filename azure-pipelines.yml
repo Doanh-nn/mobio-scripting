@@ -6,8 +6,12 @@
 pool:
   name	: azure-hk-agentpool-prod-prv-001
 
-steps:
-- script: |
-    chmod +x script-download-images.sh 
-    ./script-download-images.sh	
-  displayName: 'Run a bash script'
+stages:
+- stage: Init
+  jobs:
+  - job: Init
+    steps:
+    - script: |
+        chmod +x script-download-images.sh 
+        ./script-download-images.sh	
+      displayName: 'Run a bash script'
