@@ -1,5 +1,8 @@
 pool:
-  name	: azure-hk-agentpool-prod-prv-001
+  name	: $(selfAgentPool)
+
+variables:
+- group: prod-var-connections
 
 stages:
 - stage: Init
