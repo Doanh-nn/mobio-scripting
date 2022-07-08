@@ -33,4 +33,7 @@ Voucher|registry.mobio.vn/voucher:MASTER-48
 WebPushAPI|registry.mobio.vn/web-push-api:MASTER-36
 workflow-engine|registry.mobio.vn/journey:MASTER-68
 vib_scheduler|registry.mobio.vn/vib-schedule:MASTER-11
+NginxPrivate|registry.mobio.vn/nginx-onpremise:BANK-3.19.1
+NginxPublic|registry.mobio.vn/nginx-publicgateway:3.19.0
+Monstache|registry.mobio.vn/mobio_monstache:5
 
