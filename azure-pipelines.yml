@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 pool:
   name	: azure-hk-agentpool-prod-prv-001
 
@@ -11,7 +6,16 @@ stages:
   jobs:
   - job: Init
     steps:
-    - script: |
-        chmod +x script-download-images.sh 
+    - bash: | 
         ./script-download-images.sh	
-      displayName: 'Run a bash script'
+      displayName: 'Run pull images script'
+    
+    - task: Docker@2
+      inputs:
+        containerRegistry: $(dockerRegistryServiceConnection)
+        command: 'login'
+      displayName: 'Login ACR'
+    
+    - bash: |
+        ./script-push-images.sh
+      displayName: 'Run push images script'
