@@ -27,19 +27,3 @@ spec:
   selector:
     matchLabels:
       pv: mobio-public-resources-shared-deployment
-
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mobio-resources-data-pvc
-spec:
-  resources:
-    requests:
-      storage: 50G
-  accessModes:
-    - ReadWriteMany
-  selector:
-    matchLabels:
-      pv: mobio-resources-data-deployment
