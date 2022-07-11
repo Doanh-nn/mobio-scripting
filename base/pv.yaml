@@ -12,11 +12,11 @@ spec:
   persistentVolumeReclaimPolicy: Retain    
   azureFile:
     # Replace with your secret name
-    secretName: azure-secret
+    secretName: azurefilemktgsecret
     # Replace with correct storage share name
     shareName: mobio
     # In case the secret is stored in a different namespace
-    #secretNamespace: default
+    secretNamespace: mobio
     readOnly: false
 ---
 apiVersion: v1
@@ -33,9 +33,9 @@ spec:
   persistentVolumeReclaimPolicy: Retain    
   azureFile:
     # Replace with your secret name
-    secretName: azure-secret
+    secretName: azurefilemktgsecret
     # Replace with correct storage share name
     shareName: mobio
     # In case the secret is stored in a different namespace
-    #secretNamespace: default
+    secretNamespace: mobio
     readOnly: false
