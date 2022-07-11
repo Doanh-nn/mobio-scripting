@@ -25,8 +25,19 @@ stages:
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: $(kubernetesServiceConnection)
-        #namespace: $(namespace)
+        #namespace: $(nameSpace)
         #secretType: 'dockerRegistry'
         #containerRegistryType: 'Azure Container Registry'
         command: apply
-        arguments: -f pv.yaml pvc.yaml
+        arguments: -f pv.yaml
+        
+    - task: Kubernetes@1
+      displayName: kubectl apply
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: $(kubernetesServiceConnection)
+        #namespace: $(nameSpace)
+        #secretType: 'dockerRegistry'
+        #containerRegistryType: 'Azure Container Registry'
+        command: apply
+        arguments: -f pvc.yaml
