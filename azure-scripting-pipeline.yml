@@ -4,6 +4,14 @@ pool:
 variables:
 - group: prod-var-connections
 
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - scripting
+
 stages:
 - stage: Init
   jobs:
