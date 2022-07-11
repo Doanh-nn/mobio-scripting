@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mobio-public-resources-pv
+  labels:
+    pv: mobio-public-resources-shared-deployment
+spec:
+  capacity:
+    storage: 50G
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain    
+  azureFile:
+    # Replace with your secret name
+    secretName: azure-secret
+    # Replace with correct storage share name
+    shareName: mobio
+    # In case the secret is stored in a different namespace
+    #secretNamespace: default
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mobio-resoures-pv
+  labels:
+    pv: mobio-resources-shared-deployment
+spec:
+  capacity:
+    storage: 50G
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain    
+  azureFile:
+    # Replace with your secret name
+    secretName: azure-secret
+    # Replace with correct storage share name
+    shareName: mobio
+    # In case the secret is stored in a different namespace
+    #secretNamespace: default
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mobio-resoures-data-pv
+  labels:
+    pv: mobio-resources-data-deployment
+spec:
+  capacity:
+    storage: 50G
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain    
+  azureFile:
+    # Replace with your secret name
+    secretName: azure-secret
+    # Replace with correct storage share name
+    shareName: mobio
+    # In case the secret is stored in a different namespace
+    #secretNamespace: default
+    readOnly: false
