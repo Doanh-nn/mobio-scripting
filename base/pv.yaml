@@ -14,7 +14,7 @@ spec:
     # Replace with your secret name
     secretName: azurefilemktgsecret
     # Replace with correct storage share name
-    shareName: mobio
+    shareName: mktg-data
     # In case the secret is stored in a different namespace
     secretNamespace: mobio
     readOnly: false
@@ -35,7 +35,7 @@ spec:
     # Replace with your secret name
     secretName: azurefilemktgsecret
     # Replace with correct storage share name
-    shareName: mobio
+    shareName: mktg-data
     # In case the secret is stored in a different namespace
     secretNamespace: mobio
     readOnly: false

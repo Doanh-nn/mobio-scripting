@@ -1,0 +1,32 @@
+pool:
+  name	: $(selfAgentPool)
+
+variables:
+- group: prod-var-connections
+
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    exclude:
+    - scripting
+
+stages:
+- stage: Init
+  jobs:
+  - job: Init
+    steps:
+    - bash: |
+        cd base
+    
+    - task: Kubernetes@1
+      displayName: kubectl apply
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: $(kubernetesServiceConnection)
+        #namespace: $(namespace)
+        #secretType: 'dockerRegistry'
+        #containerRegistryType: 'Azure Container Registry'
+        command: apply
+        arguments: -f pv.yaml pvc.yaml
