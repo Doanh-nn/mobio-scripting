@@ -4,13 +4,13 @@ pool:
 variables:
 - group: prod-var-connections
 
-trigger:
-  branches:
-    include:
-    - main
-  paths:
-    exclude:
-    - scripting
+trigger: none
+  # branches:
+  #   include:
+  #   - main
+  # paths:
+  #   exclude:
+  #   - scripting
 
 stages:
 - stage: Init
@@ -23,8 +23,6 @@ stages:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: $(kubernetesServiceConnection)
         namespace: $(nameSpace)
-        #secretType: 'dockerRegistry'
-        #containerRegistryType: 'Azure Container Registry'
         command: apply
         arguments: -f base/pv.yaml
 
@@ -34,7 +32,5 @@ stages:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: $(kubernetesServiceConnection)
         namespace: $(nameSpace)
-        #secretType: 'dockerRegistry'
-        #containerRegistryType: 'Azure Container Registry'
         command: apply
         arguments: -f base/pvc.yaml
