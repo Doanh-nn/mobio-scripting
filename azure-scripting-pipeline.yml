@@ -18,6 +18,7 @@ stages:
   - job: Init
     steps:
     - bash: |
+        cd scripting
         chmod +x script-download-images.sh
         ./script-download-images.sh	
       displayName: 'Run pull images script'
