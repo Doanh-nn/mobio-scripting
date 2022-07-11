@@ -22,7 +22,7 @@ stages:
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: $(kubernetesServiceConnection)
-        #namespace: $(nameSpace)
+        namespace: $(nameSpace)
         #secretType: 'dockerRegistry'
         #containerRegistryType: 'Azure Container Registry'
         command: apply
@@ -33,7 +33,7 @@ stages:
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: $(kubernetesServiceConnection)
-        #namespace: $(nameSpace)
+        namespace: $(nameSpace)
         #secretType: 'dockerRegistry'
         #containerRegistryType: 'Azure Container Registry'
         command: apply
