@@ -5,12 +5,6 @@ variables:
 - group: prod-var-connections
 
 trigger: none
-  # branches:
-  #   include:
-  #   - main
-  # paths:
-  #   exclude:
-  #   - scripting
 
 stages:
 - stage: Init
