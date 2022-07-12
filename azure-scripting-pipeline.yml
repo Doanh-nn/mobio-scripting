@@ -10,7 +10,7 @@ trigger:
     - main
   paths:
     include:
-    - scripting
+    - scripting/*
 
 stages:
 - stage: Init
