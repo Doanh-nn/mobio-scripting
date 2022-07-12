@@ -30,6 +30,7 @@ stages:
       displayName: 'Login ACR'
     
     - bash: |
+        cd scripting
         chmod +x script-push-images.sh
         ./script-push-images.sh
       displayName: 'Run push images script'
