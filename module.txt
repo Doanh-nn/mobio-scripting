@@ -1,7 +1,7 @@
-NginxPrivate|registry.mobio.vn/nginx-onpremise:BANK-3.19.1
-NginxPublic|registry.mobio.vn/nginx-publicgateway:3.19.0
-Monstache|registry.mobio.vn/mobio_monstache:5
-#Administration|registry.mobio.vn/administration:MASTER-108
+#NginxPrivate|registry.mobio.vn/nginx-onpremise:BANK-3.19.1
+#NginxPublic|registry.mobio.vn/nginx-publicgateway:3.19.0
+#Monstache|registry.mobio.vn/mobio_monstache:5
+Administration|registry.mobio.vn/administration:MASTER-108-HOTFIX-1
 #ads|registry.mobio.vn/ads:MASTER-38
 #audience-apis|registry.mobio.vn/audience:MASTER-16
 #Audience|registry.mobio.vn/audience-v2:MASTER-10
@@ -12,7 +12,7 @@ Monstache|registry.mobio.vn/mobio_monstache:5
 #emailmarketing|registry.mobio.vn/emk:MASTER-14
 #jb-etl|registry.mobio.vn/jb-etl:MASTER-12
 #jb-waiter|registry.mobio.vn/jb-waiter:MASTER-6:MAster
-LandingPage|registry.mobio.vn/landingpage:MASTER-48
+#LandingPage|registry.mobio.vn/landingpage:MASTER-48
 #loyalty|registry.mobio.vn/loyalty:MASTER-71
 #MarketingV3|registry.mobio.vn/marketingv3:MASTER-27
 #media|registry.mobio.vn/media:MASTER-40
@@ -25,7 +25,7 @@ LandingPage|registry.mobio.vn/landingpage:MASTER-48
 #profile_factory|registry.mobio.vn/profile-factory:MASTER-55
 #ProfileScan|registry.mobio.vn/profile-scan:MASTER-12
 #profiling_v4|registry.mobio.vn/profiling-v4:MASTER-145-HOTFIX-8
-Session-SocketIO|registry.mobio.vn/notify-socketio:MASTER-12
+#Session-SocketIO|registry.mobio.vn/notify-socketio:MASTER-12
 #social_listener|registry.mobio.vn/social-listener:MASTER-8
 #Social|registry.mobio.vn/social:MASTER-71
 #survey|registry.mobio.vn/survey:MASTER-33
