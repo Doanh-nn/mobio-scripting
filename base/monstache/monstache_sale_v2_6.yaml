@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monstache-sale-v2-6-config
+data:
+  sale.conf: |
+     gzip = true
+     mongo-url = "mongodb://_MONGO_USER_:_MONGO_PASSWORD_@mongo1:27017,mongo2:27017,mongo3:27017/?readPreference=secondaryPreferred"
+     elasticsearch-urls = ["http://_ELASTIC_SEARCH_HOST_:_ELASTIC_SEARCH_PORT_"]
+     elasticsearch-max-conns = 4
+     change-stream-namespaces = ["sale.deal"]
+     direct-read-namespaces = ["sale.deal"]
+     direct-read-stateful = true
+     verbose = true
+     resume = true
+     resume-strategy = 1
+     resume-name="monstache-sale-v2-6-pod"
+     [logs]
+     error = "/dev/stderr"
+     [[mapping]]
+     namespace="sale.deal"
+     index="mobio-sale-v2_6"
+     type="p_raw"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monstache-sale-v2-6-deploy
+  labels:
+    app: monstache-sale-v2-6
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monstache-sale-v2-6
+  template:
+    metadata:
+      labels:
+        app: monstache-sale-v2-6
+    spec:
+      containers:
+        - image: registry.mobio.vn/mobio_monstache:5
+          name: monstache-sale-v2-6
+          args: ["/home/mobio/sale.conf"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 2Gi
+              cpu: 500m
+          envFrom:
+           - configMapRef:
+              name: mobio-config
+
+          volumeMounts:
+            - name: config
+              mountPath: /home/mobio/sale.conf
+              subPath: sale.conf
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: monstache-sale-v2-6-config
+      imagePullSecrets:
+        - name: registrypullsecret
