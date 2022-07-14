@@ -1,7 +1,7 @@
 #NginxPrivate|registry.mobio.vn/nginx-onpremise:BANK-3.19.1
 #NginxPublic|registry.mobio.vn/nginx-publicgateway:3.19.0
 #Monstache|registry.mobio.vn/mobio_monstache:5
-Administration|registry.mobio.vn/administration:MASTER-108-HOTFIX-1
+#Administration|registry.mobio.vn/administration:MASTER-108-HOTFIX-1
 #ads|registry.mobio.vn/ads:MASTER-38
 #audience-apis|registry.mobio.vn/audience:MASTER-16
 #Audience|registry.mobio.vn/audience-v2:MASTER-10
@@ -11,7 +11,7 @@ Administration|registry.mobio.vn/administration:MASTER-108-HOTFIX-1
 #dynamic_event|registry.mobio.vn/dynamic-event:MASTER-16
 #emailmarketing|registry.mobio.vn/emk:MASTER-14
 #jb-etl|registry.mobio.vn/jb-etl:MASTER-12
-#jb-waiter|registry.mobio.vn/jb-waiter:MASTER-6:MAster
+#jb-waiter|registry.mobio.vn/jb-waiter:MASTER-6
 #LandingPage|registry.mobio.vn/landingpage:MASTER-48
 #loyalty|registry.mobio.vn/loyalty:MASTER-71
 #MarketingV3|registry.mobio.vn/marketingv3:MASTER-27
@@ -32,7 +32,7 @@ Administration|registry.mobio.vn/administration:MASTER-108-HOTFIX-1
 #Tag|registry.mobio.vn/tag:MASTER-12
 #ticket|registry.mobio.vn/ticket:MASTER-33
 #user_event|registry.mobio.vn/user-event:MASTER-78
-#Voucher|registry.mobio.vn/voucher:MASTER-48
+Voucher|registry.mobio.vn/voucher:MASTER-51-HOTFIX-4
 #WebPushAPI|registry.mobio.vn/web-push-api:MASTER-36
 #workflow-engine|registry.mobio.vn/journey:MASTER-68
 #vib_scheduler|registry.mobio.vn/vib-schedule:MASTER-11
