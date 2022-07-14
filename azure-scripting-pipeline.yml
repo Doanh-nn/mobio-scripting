@@ -10,8 +10,7 @@ trigger:
     - main
   paths:
     include:
-    - scripting/script-download-images.sh	
-    - scripting/script-push-images.sh
+    - scripting/*
 
 stages:
 - stage: Init
