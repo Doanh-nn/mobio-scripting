@@ -20,7 +20,7 @@ for fields in ${list_module_info[@]}
 do
     if [[ $fields == \#* ]]; then
         echo "ignored"
-    elif [[ $fields == 'base/pv-pvc' ]]; then
+    elif [[ $fields == *0000* ]]; then
         echo "ignored"
     else
         IFS=$"|" read -r folder image <<< "$fields"
