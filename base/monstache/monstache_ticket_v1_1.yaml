@@ -39,7 +39,7 @@ spec:
         app: monstache-ticket-v1-1
     spec:
       containers:
-        - image: registry.mobio.vn/mobio_monstache:5
+        - image: {image}
           name: monstache-ticket-v1-1
           args: ["/home/mobio/ticket.conf"]
           resources:

@@ -39,7 +39,7 @@ spec:
         app: monstache-journey-report-link-v1-0-pod
     spec:
       containers:
-        - image: registry.mobio.vn/mobio_monstache:5
+        - image: {image}
           name: monstache-journey-report-link-v1-0-pod
           args: ["/home/mobio/journey_report_link.conf"]
           resources:

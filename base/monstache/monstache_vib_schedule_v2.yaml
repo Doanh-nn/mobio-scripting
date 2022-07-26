@@ -45,7 +45,7 @@ spec:
         app: monstache-vib-schedule-v2
     spec:
       containers:
-        - image: registry.mobio.vn/mobio_monstache:5
+        - image: {image}
           name: monstache-vib-schedule-v2
           args: ["/home/mobio/vib_schedule.conf"]
           resources:

@@ -22,6 +22,8 @@ do
     if [[ $fields == \#* ]];
     then
         echo "ignored"
+    elif [[ $fields == 'base/pv-pvc' ]]; then
+        echo "ignored"
     else
         IFS=$"|" read -r folder image <<< "$fields"
         echo "--- $folder ---"

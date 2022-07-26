@@ -45,7 +45,7 @@ spec:
         app: monstache-profiling-v16-3
     spec:
       containers:
-        - image: registry.mobio.vn/mobio_monstache:5
+        - image: {image}
           name: monstache-profiling-v16-3
           args: ["/home/mobio/profiling.conf"]
           resources:

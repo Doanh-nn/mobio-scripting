@@ -18,8 +18,9 @@ function retag_image(){
 
 for fields in ${list_module_info[@]}
 do
-    if [[ $fields == \#* ]];
-    then
+    if [[ $fields == \#* ]]; then
+        echo "ignored"
+    elif [[ $fields == 'base/pv-pvc' ]]; then
         echo "ignored"
     else
         IFS=$"|" read -r folder image <<< "$fields"
