@@ -12,7 +12,6 @@ stages:
   - job: Init
     steps:
     - bash: |
-        cd scripting
         chmod +x script-apply-mobio-services.sh
         ./script-apply-mobio-services.sh	
       displayName: 'Run deploy script'
