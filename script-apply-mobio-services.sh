@@ -4,8 +4,7 @@ VIB_REGISTRY_URI=hkacrallcardxprod001.azurecr.io
 
 REGISTRY_MOBIO_URI="registry.mobio.vn"
 
-IFS=$'\r\n' GLOBIGNORE='*' command eval  'list_module_info=($(cat $(pwd)/module.txt))'
-
+IFS=$'\r\n' GLOBIGNORE='*' command eval  'list_module_info=($(cat $(pwd)/scripting/module.txt))'
 
 function apply_deploy() {
     #### delete
