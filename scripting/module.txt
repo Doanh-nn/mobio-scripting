@@ -17,10 +17,10 @@ yaml/loyalty|registry.mobio.vn/loyalty:MASTER-91-HOTFIX-3
 yaml/MarketingV3|registry.mobio.vn/marketingv3:MASTER-27-HOTFIX-5
 yaml/media|registry.mobio.vn/media:MASTER-41-HOTFIX-2
 yaml/MerchantMCC|registry.mobio.vn/mcc-merchant:MASTER-3-HOTFIX-1
-yaml/mobio-report|registry.mobio.vn/mobio-report:MASTER-20-HOTFIX-3
+yaml/mobio-report|registry.mobio.vn/mobio-report:MASTER-20-HOTFIX-5
 yaml/MobioTemplate|registry.mobio.vn/mobio-template:MASTER-13-HOTFIX-8
 yaml/MonitorKafka|registry.mobio.vn/monitorkafka:MASTER-27
-yaml/NotifyManagerV2|registry.mobio.vn/nm2:MASTER-76-HOTFIX-2
+yaml/NotifyManagerV2|registry.mobio.vn/nm2:MASTER-76-HOTFIX-4
 yaml/personal-email|registry.mobio.vn/personal-mail:MASTER-12
 yaml/profile_factory|registry.mobio.vn/profile-factory:MASTER-59
 yaml/ProfileScan|registry.mobio.vn/profile-scan:MASTER-12-HOTFIX-2
@@ -34,5 +34,5 @@ yaml/ticket|registry.mobio.vn/ticket:MASTER-34-HOTFIX-2
 yaml/user_event|registry.mobio.vn/user-event:MASTER-78-HOTFIX-9
 yaml/Voucher|registry.mobio.vn/voucher:MASTER-51-HOTFIX-4
 yaml/WebPushAPI|registry.mobio.vn/web-push-api:MASTER-39
-yaml/workflow-engine|registry.mobio.vn/journey:MASTER-68-HOTFIX-4
+yaml/workflow-engine|registry.mobio.vn/journey:MASTER-68-HOTFIX-8
 yaml/vib_scheduler|registry.mobio.vn/vib-scheduler:MASTER-15
