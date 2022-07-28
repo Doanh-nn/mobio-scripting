@@ -1,3 +1,5 @@
+base/keda|registry.mobio.vn/keda:2.7.1
+base/keda|registry.mobio.vn/keda-metrics-apiserver:2.7.1
 base/pv-pvc|0000
 base/nginx-private|registry.mobio.vn/nginx-onpremise:BANK-3.19.1-HOTFIX-3
 base/nginx-public|registry.mobio.vn/nginx-publicgateway:3.19.0-HOTFIX-4
@@ -24,7 +26,7 @@ yaml/NotifyManagerV2|registry.mobio.vn/nm2:MASTER-76-HOTFIX-4
 yaml/personal-email|registry.mobio.vn/personal-mail:MASTER-12
 yaml/profile_factory|registry.mobio.vn/profile-factory:MASTER-59
 yaml/ProfileScan|registry.mobio.vn/profile-scan:MASTER-12-HOTFIX-2
-yaml/profiling_v4|registry.mobio.vn/profiling-v4:MASTER-145-HOTFIX-10
+yaml/profiling_v4|registry.mobio.vn/profiling-v4:MASTER-145-HOTFIX-11
 yaml/Session-SocketIO|registry.mobio.vn/notify-socketio:MASTER-13
 yaml/social_listener|registry.mobio.vn/social-listener:MASTER-16-HOTFIX-9
 yaml/Social|registry.mobio.vn/social:MASTER-71-HOTFIX-1-5
