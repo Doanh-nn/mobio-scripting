@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mobio-config
+  namespace: mobio
+data:
+  LC_ALL: 'en_US.UTF-8'
+  HOST: 'https://apigw.vib.com.vn/egatemarketing/1.0.0'
+  ADMIN_HOST: 'https://marketingtool.vib.com.vn/'
+  CEM_HOST: 'https://marketingtool.vib.com.vn/'
+  VM_TYPE: 'VIB'
+  VM_PREFIX: 'VIB'
+  APPLICATION_DATA_DIR: '/media/data/resources/'
+  APPLICATION_LOGS_DIR: '/media/data/logs/daily/'
+  PUBLIC_DATA_DIR: '/media/data/public-resources/'
+  PUBLIC_HOST: 'https://promotion.vib.com.vn/mktg/'
+  k8s: '1'
+  REQUESTS_CA_BUNDLE: '/media/data/resources/SSL/cabundle.crt'
+  SSL_CERT_FILE: '/media/data/resources/SSL/fullchain.pem'
+  MYSQL_HOST: 'mysql-server'
+  MYSQL_PORT: '3306'
+  MONGO_HOST: 'mongo3'
+  MONGO_PORT: '27017'
+  #CALLCENTER_HOME: '/media/data/projects/CallCenter'
+  #CC_HOME: '/media/data/projects/CallCenter'
+  #CALLCENTER_FOLDER_NAME: 'CallCenter'
+  REDIS_HOST: 'redis-server'
+  REDIS_PORT: '6379'
+  KAFKA_BROKER: 'kafka1:9092,kafka2:9092,kafka3:9092'
+  KAFKA_PORT: '9092'
+  KAFKA_REPLICATION_FACTOR: '3'
+  ELASTIC_SEARCH_HOST: 'elasticsearch'
+  ELASTIC_SEARCH_PORT: '9200'
+  HOST_NAME: 'VIB'
+  LAKE_DOMAIN: 'aet.mobio.vn'
+  PROFILING_DOMAIN: 'https://marketingtool.vib.com.vn/'
+  MARKETING_HOST_SHORTEN_URL_DEFAULT: 'https://promotion.vib.com.vn/mktg/'
+  MARKETING_HOST_EXPERIMENT_URL_DEFAULT: 'https://promotion.vib.com.vn/exp_url/mktg/'
+  FACTORY_SLACK_WARNING_URL: 'https://hooks.slack.com/services/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'
+  EVENT_SLACK_WARNING_URL: 'https://hooks.slack.com/services/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'
+  JOURNEY_BUILDER_HOST_SHORTEN_URL_DEFAULT: 'https://promotion.vib.com.vn/mktg/'
+  JOURNEY_BUILDER_HOST_EXPERIMENT_URL_DEFAULT: 'https://promotion.vib.com.vn/exp_url/mktg/'
+  RAPPORTEUR_ELASTIC_SEARCH_HOST: 'elasticsearch1'
+  RAPPORTEUR_ELASTIC_SEARCH_PORT: '9200'
+  CASSANDRA_HOST: 'cassandra1,cassandra2,cassandra3'
+  CASSANDRA_PORT: '9042'
+  ZOOKEEPER_CLUSTER: 'kafka1:2181,kafka2:2181,kafka3:2181'
+  custom_host: |-
+    echo -e "\n
+    10.210.32.4 mysql-server\n
+    10.210.32.69 redis-server\n    
+    10.210.32.11 mongo1\n
+    10.210.32.12 mongo2\n
+    10.210.32.13 mongo3\n
+    10.210.33.4 kafka1\n
+    10.210.33.5 kafka2\n
+    10.210.33.6 kafka3\n
+    10.210.32.31 elasticsearch1\n
+    10.210.32.32 elasticsearch2\n
+    10.210.32.33 elasticsearch3\n
+    10.210.32.21 cassandra1\n
+    10.210.32.22 cassandra2\n        
+    10.210.32.23 cassandra3\n" | tee -a /etc/hosts

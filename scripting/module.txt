@@ -1,3 +1,4 @@
+base/config|0000
 base/keda|registry.mobio.vn/keda:2.7.1
 base/keda|registry.mobio.vn/keda-metrics-apiserver:2.7.1
 base/pv-pvc|0000
