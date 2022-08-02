@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: vib-scheduler-consumer-report-cards-deployment
+ labels:
+   app: vib-scheduler-consumer-report-cards
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: vib-scheduler-consumer-report-cards
+ template:
+   metadata:
+     labels:
+       app: vib-scheduler-consumer-report-cards
+   spec:
+     containers:
+       - name: vib-scheduler-consumer-report-cards
+         image: {image}
+         command: ["/bin/sh", "-c"]
+         args: ["cd $VIB_SCHEDULER_HOME; sh prepare_env.sh && python3.8 -u new_vib_consumer_services.py 'vib-reports-consumer' 'vib-reports-cards'"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+           - secretRef:
+               name: mobio-secret
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc
