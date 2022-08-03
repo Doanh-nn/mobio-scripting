@@ -29,15 +29,15 @@ stages:
         command: apply
         arguments: -f base/pv-pvc/pvc.yaml
         
-    - bash: |
-        az login --service-principal -u $(aksAppID) -p $(aksAppSecret) --tenant $(tenantID)
-        az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster) --admin 
-      displayName: 'Get AKS context'
+    # - bash: |
+    #     az login --service-principal -u $(aksAppID) -p $(aksAppSecret) --tenant $(tenantID)
+    #     az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster) --admin 
+    #   displayName: 'Get AKS context'
 
-    - bash: |
-        chmod +x script-apply-mobio-services.sh
-        ./script-apply-mobio-services.sh	
-      displayName: 'Run deploy script'
+    # - bash: |
+    #     chmod +x script-apply-mobio-services.sh
+    #     ./script-apply-mobio-services.sh	
+    #   displayName: 'Run deploy script'
     
     
     
