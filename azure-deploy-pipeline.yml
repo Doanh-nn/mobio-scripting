@@ -18,7 +18,7 @@ stages:
         kubernetesServiceEndpoint: $(kubernetesServiceConnection)
         namespace: $(nameSpace)
         command: apply
-        arguments: -f base/pv.yaml
+        arguments: -f base/pv-pvc/pv.yaml
 
     - task: Kubernetes@1
       displayName: kubectl apply
@@ -27,7 +27,7 @@ stages:
         kubernetesServiceEndpoint: $(kubernetesServiceConnection)
         namespace: $(nameSpace)
         command: apply
-        arguments: -f base/pvc.yaml
+        arguments: -f base/pv-pvc/pvc.yaml
         
     - bash: |
         az login --service-principal -u $(aksAppID) -p $(aksAppSecret) --tenant $(tenantID)
