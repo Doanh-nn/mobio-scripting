@@ -8,7 +8,7 @@ REGISTRY_MOBIO_PASS="Vib@$^*1357"
 
 IFS=$'\r\n' GLOBIGNORE='*' command eval  'list_module_info=($(cat $(pwd)/module.txt))'
 
-function retag_image(){
+function push_image(){
     new_image=$(sed "s|${REGISTRY_MOBIO_URI}|${VIB_REGISTRY_URI}|g" <<< "$image")
 
     docker tag $image $new_image
@@ -27,7 +27,6 @@ do
     else
         IFS=$"|" read -r folder image <<< "$fields"
         echo "--- $folder ---"
-        retag_image $folder $image
+        push_image $folder $image
     fi
-    
 done
