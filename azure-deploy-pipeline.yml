@@ -11,6 +11,24 @@ stages:
   jobs:
   - job: Init
     steps:
+    - task: Kubernetes@1
+      displayName: kubectl apply
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: $(kubernetesServiceConnection)
+        namespace: $(nameSpace)
+        command: apply
+        arguments: -f base/pv.yaml
+
+    - task: Kubernetes@1
+      displayName: kubectl apply
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: $(kubernetesServiceConnection)
+        namespace: $(nameSpace)
+        command: apply
+        arguments: -f base/pvc.yaml
+        
     - bash: |
         az login --service-principal -u $(aksAppID) -p $(aksAppSecret) --tenant $(tenantID)
         az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster) --admin 
@@ -20,22 +38,6 @@ stages:
         chmod +x script-apply-mobio-services.sh
         ./script-apply-mobio-services.sh	
       displayName: 'Run deploy script'
-    # - task: Kubernetes@1
-    #   displayName: kubectl apply
-    #   inputs:
-    #     connectionType: 'Kubernetes Service Connection'
-    #     kubernetesServiceEndpoint: $(kubernetesServiceConnection)
-    #     namespace: $(nameSpace)
-    #     command: apply
-    #     arguments: -f base/pv.yaml
-
-    # - task: Kubernetes@1
-    #   displayName: kubectl apply
-    #   inputs:
-    #     connectionType: 'Kubernetes Service Connection'
-    #     kubernetesServiceEndpoint: $(kubernetesServiceConnection)
-    #     namespace: $(nameSpace)
-    #     command: apply
-    #     arguments: -f base/pvc.yaml
+    
     
     
