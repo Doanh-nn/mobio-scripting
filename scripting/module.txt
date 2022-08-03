@@ -4,7 +4,7 @@ base/keda|registry.mobio.vn/keda-metrics-apiserver:2.7.1
 base/pv-pvc|0000
 base/nginx-private|registry.mobio.vn/nginx-onpremise:BANK-3.19.1-HOTFIX-3
 base/nginx-public|registry.mobio.vn/nginx-publicgateway:3.19.0-HOTFIX-4
-base/Monstache|registry.mobio.vn/mobio_monstache:5.2
+base/monstache|registry.mobio.vn/mobio_monstache:5.2
 yaml/Administration|registry.mobio.vn/administration:MASTER-108-HOTFIX-5
 yaml/ads|registry.mobio.vn/ads:MASTER-43
 yaml/audience-apis|registry.mobio.vn/audience:MASTER-16-HOTFIX-1
