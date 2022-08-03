@@ -4,7 +4,7 @@ metadata:
   name: mobio-resources-pvc
   namespace: mobio
   annotations:
-    volume.beta.kubernetes.io/storage-class: "azurefile"
+    volume.beta.kubernetes.io/storage-class: ""
 spec:
   resources:
     requests:
@@ -23,7 +23,7 @@ metadata:
   name: mobio-public-resources-pvc
   namespace: mobio
   annotations:
-    volume.beta.kubernetes.io/storage-class: "azurefile"  
+    volume.beta.kubernetes.io/storage-class: ""  
 spec:
   resources:
     requests:
