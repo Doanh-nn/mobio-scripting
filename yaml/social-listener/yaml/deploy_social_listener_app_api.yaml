@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: social-listener-app-api-deployment
+  labels:
+    app: social-listener-app-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: social-listener-app-api
+  template:
+    metadata:
+      labels:
+        app: social-listener-app-api
+    spec:
+      containers:
+        - name: social-listener
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $SOCIAL_LISTENER_HOME; sh prepare_env.sh && uwsgi --http :11115 --wsgi-file app_social_listener.py --disable-logging --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+            - secretRef:
+                name: mobio-secret
+          ports:
+            - containerPort: 11115
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          livenessProbe:
+            httpGet:
+              port: 11115
+              path: /api/v1.0/ping
+            initialDelaySeconds: 120
+            periodSeconds: 5
+            timeoutSeconds: 4
+            successThreshold: 1
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: social-listener-app-api-service
+  labels:
+    app: social-listener-app-api
+spec:
+  ports:
+    - port: 11115
+      name: old
+    - port: 80
+      name: new
+      protocol: TCP
+      targetPort: 11115
+  selector:
+    app: social-listener-app-api
