@@ -22,7 +22,11 @@ function apply_deploy() {
     #find $1 -name '*.yaml' -type f -exec kubectl delete -f {} -n mobio ';'
  
     #### apply
-    find $1 -name '*.yaml' -type f -exec /bin/sh -c "sed \"s#{image}#${2}#g\" {} | kubectl apply -n mobio -f -" ';'
+    if [[ $folder == "*keda*" ]]; then
+        find $folder -name '*.yaml' -type f -exec /bin/sh -c "sed \"s#{image}#${new_image}#g\" {} | kubectl apply -f -" ';'
+    else
+        find $folder -name '*.yaml' -type f -exec /bin/sh -c "sed \"s#{image}#${new_image}#g\" {} | kubectl apply -n mobio -f -" ';'
+    fi
  
     #### restart
     #find $1 -name '*.yaml' -type f -exec kubectl rollout restart -f {} -n mobio ';'
