@@ -31,6 +31,7 @@ spec:
     storage: 50G
   accessModes:
     - ReadWriteMany
+  storageClassName: "azurefile"
   persistentVolumeReclaimPolicy: Retain    
   azureFile:
     # Replace with your secret name
