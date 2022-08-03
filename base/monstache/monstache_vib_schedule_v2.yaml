@@ -32,8 +32,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: monstache-vib-schedule-v2-deploy
-    labels:
-      app: monstache-vib-schedule-v2
+  labels:
+    app: monstache-vib-schedule-v2
 spec:
   replicas: 1
   selector:
