@@ -28,16 +28,34 @@ stages:
     #     namespace: $(nameSpace)
     #     command: apply
     #     arguments: -f base/pv-pvc/pvc.yaml
+    
+    - task: Kubernetes@1
+      displayName: kubectl apply
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: $(kubernetesServiceConnection)
+        namespace: $(nameSpace)
+        command: apply
+        arguments: -f base/config/configmap.yaml
 
-    - bash: |
-        az login --service-principal -u $(aksAppID) -p $(aksAppSecret) --tenant $(tenantID)
-        az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster) --admin 
-      displayName: 'Get AKS context'
+    - task: Kubernetes@1
+      displayName: kubectl apply
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: $(kubernetesServiceConnection)
+        namespace: $(nameSpace)
+        command: apply
+        arguments: -f base/config/secret-configmap.yaml
 
-    - bash: |
-        chmod +x script-apply-mobio-services.sh
-        ./script-apply-mobio-services.sh	
-      displayName: 'Run deploy script'
+    # - bash: |
+    #     az login --service-principal -u $(aksAppID) -p $(aksAppSecret) --tenant $(tenantID)
+    #     az aks get-credentials --resource-group $(resourceGroup) --name $(aksCluster) --admin 
+    #   displayName: 'Get AKS context'
+
+    # - bash: |
+    #     chmod +x script-apply-mobio-services.sh
+    #     ./script-apply-mobio-services.sh	
+    #   displayName: 'Run deploy script'
     
     
     
