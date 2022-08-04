@@ -35,7 +35,16 @@ stages:
         kubernetesServiceEndpoint: $(kubernetesServiceConnection)
         namespace: $(nameSpace)
         command: apply
-        arguments: -f base/config/*
+        arguments: -f base/config/configmap.yaml
+    
+    - task: Kubernetes@1
+      displayName: kubectl apply
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: $(kubernetesServiceConnection)
+        namespace: $(nameSpace)
+        command: apply
+        arguments: -f base/config/secret-configmap.yaml
 
     # - bash: |
     #     az login --service-principal -u $(aksAppID) -p $(aksAppSecret) --tenant $(tenantID)
