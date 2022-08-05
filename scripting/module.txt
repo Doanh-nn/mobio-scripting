@@ -7,7 +7,7 @@ base/nginx-public|registry.mobio.vn/nginx-publicgateway:3.19.0-HOTFIX-4
 base/monstache|registry.mobio.vn/mobio_monstache:5.2
 yaml/Administration|registry.mobio.vn/administration:MASTER-108-HOTFIX-5
 yaml/ads|registry.mobio.vn/ads:MASTER-43
-yaml/audience-apis|registry.mobio.vn/audience:MASTER-16-HOTFIX-1
+yaml/audience-apis|registry.mobio.vn/audience:MASTER-16-HOTFIX-4
 yaml/Audience|registry.mobio.vn/audience-v2:MASTER-10-HOTFIX-1
 yaml/CallCenter|registry.mobio.vn/callcenter:MASTER-43
 yaml/DoNotCall|registry.mobio.vn/donotcall:MASTER-20
@@ -38,4 +38,4 @@ yaml/user_event|registry.mobio.vn/user-event:MASTER-78-HOTFIX-9
 yaml/Voucher|registry.mobio.vn/voucher:MASTER-51-HOTFIX-4
 yaml/WebPushAPI|registry.mobio.vn/web-push-api:MASTER-39
 yaml/workflow-engine|registry.mobio.vn/journey:MASTER-68-HOTFIX-8
-yaml/vib_scheduler|registry.mobio.vn/vib-scheduler:MASTER-15
+yaml/vib_scheduler|registry.mobio.vn/vib-scheduler:MASTER-18

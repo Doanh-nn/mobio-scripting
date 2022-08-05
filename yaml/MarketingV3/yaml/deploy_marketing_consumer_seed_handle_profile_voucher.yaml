@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: marketing-consumer-seed-handle-profile-voucher-deployment
+ labels:
+   app: marketing-consumer-seed-handle-profile-voucher
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     app: marketing-consumer-seed-handle-profile-voucher
+ template:
+   metadata:
+     labels:
+       app: marketing-consumer-seed-handle-profile-voucher
+   spec:
+     containers:
+       - name: marketingv3
+         image: {image}
+         command: ["/bin/sh", "-c"]
+         args: ["cd $MARKETING_HOME; sh prepare_env.sh && python3.5 -u mkt_consumer_seed_handle_profile_voucher.py"]
+         envFrom:
+           - configMapRef:
+               name: mobio-config
+         volumeMounts:
+           - name: mobio-shared-data
+             mountPath: /media/data/resources/
+     imagePullSecrets:
+       - name: registrypullsecret
+     volumes:
+       - name: mobio-shared-data
+         persistentVolumeClaim:
+           claimName: mobio-resources-pvc

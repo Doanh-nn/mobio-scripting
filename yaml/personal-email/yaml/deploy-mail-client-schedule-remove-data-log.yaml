@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail-client-schedule-remove-data-log-deployment
+  labels:
+    app: mail-client-schedule-remove-data-log
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mail-client-schedule-remove-data-log
+  template:
+    metadata:
+      labels:
+        app: mail-client-schedule-remove-data-log
+    spec:
+      containers:
+        - name: mail-client
+          imagePullPolicy: Always
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $PERSONAL_MAIL_HOME; sh prepare_env.sh && python3.8 -u k8s_start_scheduler.py remove-data-log"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+            - secretRef:
+                name: mobio-secret
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+            - name: mobio-public-shared-data
+              mountPath: /media/data/public_resources/              
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+        - name: mobio-public-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-public-resources-pvc            
+    

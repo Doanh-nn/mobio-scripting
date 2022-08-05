@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: callcenter-partner-app-api-deployment
+  labels:
+    app: callcenter-partner-app-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: callcenter-partner-app-api
+  template:
+    metadata:
+      labels:
+        app: callcenter-partner-app-api
+    spec:
+      containers:
+        - name: callcenter
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $CALLCENTER_HOME; sh prepare_env.sh && uwsgi --http :80 --wsgi-file app_callcenter_partner.py
+          --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+            - secretRef:
+                name: mobio-secret
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+            - name: mobio-public-shared-data
+              mountPath: /media/data/public_resources/
+          livenessProbe:
+            httpGet:
+              port: 80
+              path: /callcenter/partner/api/v1.0/ping
+            initialDelaySeconds: 120
+            periodSeconds: 5
+            timeoutSeconds: 4
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+        - name: mobio-public-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-public-resources-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: callcenter-partner-app-api-service
+  labels:
+    app: callcenter-partner-app-api
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: callcenter-partner-app-api

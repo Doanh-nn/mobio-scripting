@@ -19,10 +19,19 @@ spec:
          image: {image}
          imagePullPolicy: Always
          command: ["/bin/sh", "-c"]
-         args: ["cd $LOYALTY_HOME; sh prepare_env.sh && python3.5 -u loyalty_schedule_service.py loyalty_update_profile_card_expired"]
+         args: ["cd $LOYALTY_HOME; sh prepare_env.sh && python3.8 -u loyalty_schedule_service.py loyalty_update_profile_card_expired"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
          envFrom:
            - configMapRef:
                name: mobio-config
+           - secretRef:
+               name: mobio-secret
          volumeMounts:
            - name: mobio-shared-data
              mountPath: /media/data/resources/

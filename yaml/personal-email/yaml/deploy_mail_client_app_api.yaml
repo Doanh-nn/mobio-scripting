@@ -23,8 +23,17 @@ spec:
          envFrom:
            - configMapRef:
                name: mobio-config
+           - secretRef:
+               name: mobio-secret
          ports:
            - containerPort: 80
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
          volumeMounts:
            - name: mobio-shared-data
              mountPath: /media/data/resources/
@@ -33,8 +42,8 @@ spec:
          livenessProbe:
            httpGet:
              port: 80
-             path: /api/v1.0/ping
-           initialDelaySeconds: 5
+             path: /mailclient/api/v1.0/ping
+           initialDelaySeconds: 120
            periodSeconds: 5
            timeoutSeconds: 4
            failureThreshold: 3
@@ -55,7 +64,6 @@ metadata:
  labels:
    app: mail-client-app-api
 spec:
- clusterIP: None
  ports:
    - port: 80
  selector:

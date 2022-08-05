@@ -23,9 +23,18 @@ spec:
           envFrom:
             - configMapRef:
                 name: mobio-config
+            - secretRef:
+                name: mobio-secret
           volumeMounts:
             - name: mobio-shared-data
               mountPath: /media/data/resources/
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
 #          livenessProbe:
 #            exec:
 #              command:

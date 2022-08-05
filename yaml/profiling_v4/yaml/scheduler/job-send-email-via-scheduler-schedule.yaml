@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: Always
           image: {image}
           command: ["/bin/sh", "-c"]
-          args: ["cd $PROFILING_V4; sh prepare_env.sh && python3.5 -u start_profile_scheduler.py job-send-email-via-scheduler"]
+          args: ["cd $PROFILING_V4; sh prepare_env.sh && python3.8 -u start_profile_scheduler.py job-send-email-via-scheduler"]
           envFrom:
             - configMapRef:
                 name: mobio-config

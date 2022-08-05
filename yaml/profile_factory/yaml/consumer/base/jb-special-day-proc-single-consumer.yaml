@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prof-fac-consumer-jb-special-day-proc-single-deployment
+  labels:
+    app: prof-fac-consumer-jb-special-day-proc-single
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prof-fac-consumer-jb-special-day-proc-single
+  template:
+    metadata:
+      labels:
+        app: prof-fac-consumer-jb-special-day-proc-single
+    spec:
+      containers:
+        - name: profile-factory
+          imagePullPolicy: Always
+          image: {image}
+          command: ["/bin/sh", "-c"]
+          args: ["cd $FACTORY_HOME; sh prepare_env.sh && python3.8 -u start_profile_factory_consumer.py jb-special-day-proc-single factory-jb-special-day-proc-single factory-jb-special-day-in-process"]
+          envFrom:
+            - configMapRef:
+                name: mobio-config
+            - secretRef:
+               name: mobio-secret
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+          volumeMounts:
+            - name: mobio-shared-data
+              mountPath: /media/data/resources/
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/bash
+          #       - -c
+          #       - ps -ef | grep start_profile_consumer_v2.py | grep -v grep
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
+      imagePullSecrets:
+        - name: registrypullsecret
+      volumes:
+        - name: mobio-shared-data
+          persistentVolumeClaim:
+            claimName: mobio-resources-pvc
+    

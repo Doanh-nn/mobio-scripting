@@ -18,7 +18,7 @@ spec:
        - name: user-event
          image: {image}
          command: ["/bin/sh", "-c"]
-         args: ["cd $EVENT_FOLDER_NAME; sh prepare_env.sh && ./venv/bin/uwsgi --http :11130 --wsgi-file app_user_event.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+         args: ["cd $USER_EVENT_HOME; sh prepare_env.sh && uwsgi --http :11130 --wsgi-file app_user_event.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
          envFrom:
            - configMapRef:
                name: mobio-config

@@ -20,9 +20,18 @@ spec:
          imagePullPolicy: Always
          command: ["/bin/sh", "-c"]
          args: ["cd $LOYALTY_HOME; sh prepare_env.sh && uwsgi --http :11051 --wsgi-file app_loyalty.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads -l 100"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 1000m
          envFrom:
            - configMapRef:
                name: mobio-config
+           - secretRef:
+               name: mobio-secret
          ports:
            - containerPort: 11051
          volumeMounts:
@@ -32,7 +41,7 @@ spec:
            httpGet:
              port: 11051
              path: /api/v1.0/ping
-           initialDelaySeconds: 1
+           initialDelaySeconds: 120
            periodSeconds: 5
            timeoutSeconds: 4
            failureThreshold: 3
@@ -51,6 +60,11 @@ metadata:
    app: loyalty-api-app
 spec:
  ports:
-   - port: 11051
+   - name: old
+     port: 11051
+   - name: new
+     port: 80
+     protocol: TCP
+     targetPort: 11051
  selector:
    app: loyalty-api-app

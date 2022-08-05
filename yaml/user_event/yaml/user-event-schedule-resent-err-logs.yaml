@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: Always
           image: {image}
           command: ["/bin/sh", "-c"]
-          args: ["cd $EVENT_FOLDER_NAME; sh prepare_env.sh && PYTHONPATH=./ ./venv/bin/python3.5 -u run_scheduler/factory_scheduler_resent_err_logs.py "]
+          args: ["cd $USER_EVENT_HOME; sh prepare_env.sh && PYTHONPATH=./ python3.8 -u run_scheduler/factory_scheduler_resent_err_logs.py "]
           envFrom:
             - configMapRef:
                 name: mobio-config

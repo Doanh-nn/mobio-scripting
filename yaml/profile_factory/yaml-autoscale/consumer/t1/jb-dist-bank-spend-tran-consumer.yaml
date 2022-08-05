@@ -1,0 +1,25 @@
+
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  namespace: mobio
+  name: prof-fac-consumer-jb-dist-bank-spend-tran-scaledobject
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: prof-fac-consumer-jb-dist-bank-spend-tran-deployment
+  pollingInterval: 30
+  cooldownPeriod: 300
+  maxReplicaCount: 4
+  minReplicaCount: 1
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: kafka1:9092,kafka2:9092,kafka3:9092
+        consumerGroup: factory-jb-bank-tran-spend-pre-process
+        topic: factory-jb-dist-bank-spend-tran
+        lagThreshold: '1000'
+        offsetResetPolicy: latest
+        allowIdleConsumers: 'true'
+        version: 2.1.1
+    

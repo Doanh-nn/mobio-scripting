@@ -18,10 +18,19 @@ spec:
         - name: audience
           image: {image}
           command: ["/bin/sh", "-c"]
-          args: ["cd $AUDIENCE_HOME; sh prepare_env.sh && python3.5 -u schedule_audience_services.py"]
+          args: ["cd $AUDIENCE_HOME; sh prepare_env.sh && python3.8 -u schedule_audience_services.py"]
           envFrom:
             - configMapRef:
                 name: mobio-config
+            - secretRef:
+                name: mobio-secret
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
           volumeMounts:
             - name: mobio-shared-data
               mountPath: /media/data/resources/

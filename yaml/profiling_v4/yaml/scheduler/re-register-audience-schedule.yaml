@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: Always
           image: {image}
           command: ["/bin/sh", "-c"]
-          args: ["cd $PROFILING_V4; sh prepare_env.sh && python3.5 -u start_profile_scheduler.py re-register-audience"]
+          args: ["cd $PROFILING_V4; sh prepare_env.sh && python3.8 -u start_profile_scheduler.py re-register-audience"]
           envFrom:
             - configMapRef:
                 name: mobio-config

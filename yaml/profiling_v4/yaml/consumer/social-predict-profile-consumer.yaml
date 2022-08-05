@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: Always
           image: {image}
           command: ["/bin/sh", "-c"]
-          args: ["cd $PROFILING_V4; sh prepare_env.sh && python3.5 -u start_profile_consumer_v2.py social-predict-profile 1"]
+          args: ["cd $PROFILING_V4; sh prepare_env.sh && python3.8 -u start_profile_consumer_v2.py social-predict-profile 1"]
           envFrom:
             - configMapRef:
                 name: mobio-config

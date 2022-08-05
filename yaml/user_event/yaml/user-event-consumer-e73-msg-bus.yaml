@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: Always
           image: {image}
           command: ["/bin/sh", "-c"]
-          args: ["cd $USER_EVENT_HOME; sh prepare_env.sh && python3.5 -u event_consumer_services.py e73-msg-bus"]
+          args: ["cd $USER_EVENT_HOME; sh prepare_env.sh && python3.8 -u event_consumer_services.py e73-msg-bus"]
           envFrom:
             - configMapRef:
                 name: mobio-config

@@ -22,8 +22,17 @@ spec:
           envFrom:
             - configMapRef:
                 name: mobio-config
+            - secretRef:
+                name: mobio-secret
           ports:
             - containerPort: 11120
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
           volumeMounts:
             - name: mobio-shared-data
               mountPath: /media/data/resources/
@@ -33,7 +42,7 @@ spec:
             httpGet:
               port: 11120
               path: /ticket/api/v1.0/ping
-            initialDelaySeconds: 1
+            initialDelaySeconds: 120
             periodSeconds: 5
             timeoutSeconds: 4
             successThreshold: 1

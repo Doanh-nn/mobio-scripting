@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: Always
           image: {image}
           command: ["/bin/sh", "-c"]
-          args: ["cd $FACTORY_HOME; sh prepare_env.sh && python3.5 -u start_profile_factory_consumer.py factory-jb-dist-bank-t3-lending-due-d-p-b"]
+          args: ["cd $FACTORY_HOME; sh prepare_env.sh && python3.8 -u start_profile_factory_consumer.py factory-jb-dist-bank-t3-lending-due-d-p-b factory-jb-dist-bank-t3-lending-due-d-p-b factory-jb-bank-t3-lending-due-date"]
           envFrom:
             - configMapRef:
                 name: mobio-config
