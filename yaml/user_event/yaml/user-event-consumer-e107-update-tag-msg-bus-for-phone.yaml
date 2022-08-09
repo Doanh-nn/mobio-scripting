@@ -23,6 +23,15 @@ spec:
           envFrom:
             - configMapRef:
                 name: mobio-config
+            - secretRef:
+                name: mobio-secret
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
           volumeMounts:
             - name: mobio-shared-data
               mountPath: /media/data/resources/
