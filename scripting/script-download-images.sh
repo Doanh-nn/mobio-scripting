@@ -1,5 +1,6 @@
 #/bin/bash
 
+
 VIB_REGISTRY_URI=hkacrallcardxprod001.azurecr.io
 
 REGISTRY_MOBIO_URI="registry.mobio.vn"
