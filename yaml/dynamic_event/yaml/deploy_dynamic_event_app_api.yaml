@@ -20,9 +20,18 @@ spec:
           image: {image}
           command: ["/bin/sh", "-c"]
           args: ["cd $DYNAMIC_EVENT; sh prepare_env.sh && python3.8 -m uvicorn dynamic_event_app:app --host 0.0.0.0 --port 11131 --workers 4"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
           envFrom:
             - configMapRef:
                 name: mobio-config
+            - secretRef:
+                name: mobio-secret
           ports:
             - containerPort: 11131
           volumeMounts:
