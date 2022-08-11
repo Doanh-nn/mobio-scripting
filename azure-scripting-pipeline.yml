@@ -23,11 +23,11 @@ stages:
     #     ./script-download-images.sh	
     #   displayName: 'Run pull images script'
     
-    # - task: Docker@2
-    #   inputs:
-    #     containerRegistry: $(dockerRegistryServiceConnection)
-    #     command: 'login'
-    #   displayName: 'Login ACR'
+    - task: Docker@2
+      inputs:
+        containerRegistry: $(dockerRegistryServiceConnection)
+        command: 'login'
+      displayName: 'Login ACR'
     
     - bash: |
         cd scripting
