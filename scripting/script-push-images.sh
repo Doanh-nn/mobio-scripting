@@ -8,9 +8,6 @@ REGISTRY_MOBIO_PASS="Vib@$^*1357"
 
 docker login -u="${REGISTRY_MOBIO_USER}" -p="${REGISTRY_MOBIO_PASS}" ${REGISTRY_MOBIO_URI}
 
-az login --service-principal -u $(aksAppID) -p $(aksAppSecret) --tenant $(tenantID)
-az acr login -n $(acrName)
-
 IFS=$'\r\n' GLOBIGNORE='*' command eval  'list_module_info=($(cat $(pwd)/module.txt))'
 
 function push_image(){
