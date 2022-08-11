@@ -17,20 +17,20 @@ stages:
   jobs:
   - job: Init
     steps:
-    - bash: |
-        cd scripting
-        chmod +x script-download-images.sh
-        ./script-download-images.sh	
-      displayName: 'Run pull images script'
+    # - bash: |
+    #     cd scripting
+    #     chmod +x script-download-images.sh
+    #     ./script-download-images.sh	
+    #   displayName: 'Run pull images script'
     
-    - task: Docker@2
-      inputs:
-        containerRegistry: $(dockerRegistryServiceConnection)
-        command: 'login'
-      displayName: 'Login ACR'
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: $(dockerRegistryServiceConnection)
+    #     command: 'login'
+    #   displayName: 'Login ACR'
     
     - bash: |
         cd scripting
         chmod +x script-push-images.sh
         ./script-push-images.sh
-      displayName: 'Run push images script'
+      displayName: 'Pull & push images script'
