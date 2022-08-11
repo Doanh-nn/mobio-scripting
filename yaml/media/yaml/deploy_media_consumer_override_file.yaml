@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+zapiVersion: apps/v1
 kind: Deployment
 metadata:
  name: media-consumer-override-file-deployment
@@ -29,6 +29,8 @@ spec:
          envFrom:
            - configMapRef:
                name: mobio-config
+           - secretRef:
+               name: mobio-secret
          volumeMounts:
            - name: mobio-shared-data
              mountPath: /media/data/resources/

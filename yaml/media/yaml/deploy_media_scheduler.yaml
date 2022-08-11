@@ -29,6 +29,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: mobio-config
+            - secretRef:
+                name: mobio-secret
           volumeMounts:
             - name: mobio-shared-data
               mountPath: /media/data/resources/

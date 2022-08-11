@@ -20,9 +20,18 @@ spec:
           imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args: ["cd $NOTIFY_MANAGER_V2; sh prepare_env.sh && uwsgi --http :11076 --wsgi-file nm_webhook_onpermise_app.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
           envFrom:
             - configMapRef:
                 name: mobio-config
+            - secretRef:
+                name: mobio-secret
           ports:
             - containerPort: 11076
           volumeMounts:

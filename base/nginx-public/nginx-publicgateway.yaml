@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: nginx-publicgateway-api
-          image: registry.mobio.vn/nginx-publicgateway:3.19.0
+          image: registry.mobio.vn/nginx-publicgateway:3.19.0-HOTFIX-4
           ports:
             - name: https
               containerPort: 443

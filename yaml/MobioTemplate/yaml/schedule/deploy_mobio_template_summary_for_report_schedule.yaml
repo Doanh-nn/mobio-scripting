@@ -20,7 +20,16 @@ spec:
          imagePullPolicy: Always
          command: ["/bin/sh", "-c"]
          args: ["cd $MOBIO_TEMPLATE_HOME; sh prepare_env.sh && python3.8 -u start_schedule.py mobio-template-schedule-summary-for-report"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m         
          envFrom:
+           - secretRef:
+               name: mobio-secret          
            - configMapRef:
                name: mobio-config
          volumeMounts:

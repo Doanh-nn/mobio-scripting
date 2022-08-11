@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: nginx-onpremise-api
-          image: registry.mobio.vn/nginx-onpremise:BANK-3.19.1
+          image: registry.mobio.vn/nginx-onpremise:BANK-3.19.1-HOTFIX-3
           ports:
             - name: http
               containerPort: 80

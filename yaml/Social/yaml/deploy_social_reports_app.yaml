@@ -20,9 +20,18 @@ spec:
          imagePullPolicy: Always
          command: ["/bin/sh", "-c"]
          args: ["cd $SOCIAL_HOME; sh prepare_env.sh && uwsgi --http :11112 --wsgi-file app_social_reports.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
+         resources:
+           requests:
+             memory: 70Mi
+             cpu: 80m
+           limits:
+             memory: 1Gi
+             cpu: 500m
          envFrom:
            - configMapRef:
                name: mobio-config
+           - secretRef:
+               name: mobio-secret
          ports:
            - containerPort: 11112
          resources:

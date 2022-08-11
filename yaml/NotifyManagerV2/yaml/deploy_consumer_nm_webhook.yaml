@@ -20,9 +20,18 @@ spec:
           imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args: ["cd $NOTIFY_MANAGER_V2; sh prepare_env.sh && python3.8 -u nm_consumer_services.py v2_nm_webhook 1"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
           envFrom:
             - configMapRef:
                 name: mobio-config
+            - secretRef:
+                name: mobio-secret
           volumeMounts:
             - name: mobio-shared-data
               mountPath: /media/data/resources/

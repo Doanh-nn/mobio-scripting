@@ -22,6 +22,8 @@ spec:
          envFrom:
            - configMapRef:
                name: mobio-config
+           - secretRef:
+               name: mobio-secret
          ports:
            - containerPort: 11220
          volumeMounts:
