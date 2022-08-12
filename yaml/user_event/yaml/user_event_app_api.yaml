@@ -26,8 +26,8 @@ spec:
                name: mobio-secret
          resources:
            requests:
-             memory: 70Mi
-             cpu: 80m
+             memory: 30Mi
+             cpu: 20m
            limits:
              memory: 1Gi
              cpu: 500m

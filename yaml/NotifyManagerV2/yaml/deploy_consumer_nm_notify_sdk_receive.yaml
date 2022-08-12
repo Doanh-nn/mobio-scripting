@@ -22,8 +22,8 @@ spec:
           args: ["cd $NOTIFY_MANAGER_V2; sh prepare_env.sh && python3.8 -u nm_consumer_services.py nm-sdk-receive-message 1"]
           resources:
             requests:
-              memory: 70Mi
-              cpu: 80m
+              memory: 30Mi
+              cpu: 20m
             limits:
               memory: 1Gi
               cpu: 500m

@@ -20,6 +20,13 @@ spec:
           imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args: ["cd SESSION_SOCKETIO_HOME; sh prepare_env.sh && node index.js"]
+          resources:
+            requests:
+              memory: 30Mi
+              cpu: 20m
+            limits:
+              memory: 1Gi
+              cpu: 500m
           envFrom:
             - configMapRef:
                 name: mobio-config

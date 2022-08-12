@@ -22,8 +22,8 @@ spec:
           args: ["cd $ADMIN_HOME; sh prepare_env.sh && python3.8 -u k8s_start_scheduler.py sync-google-calendar-event"]
           resources:
             requests:
-                memory: 70Mi
-                cpu: 80m
+                memory: 30Mi
+                cpu: 20m
             limits:
                 memory: 1Gi
                 cpu: 500m

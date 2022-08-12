@@ -22,8 +22,8 @@ spec:
          args: ["cd $SOCIAL_HOME; sh prepare_env.sh && python3.5 -u social_log_save_setting_consumer.py"]
          resources:
            requests:
-             memory: 70Mi
-             cpu: 80m
+             memory: 30Mi
+             cpu: 20m
            limits:
              memory: 1Gi
              cpu: 500m

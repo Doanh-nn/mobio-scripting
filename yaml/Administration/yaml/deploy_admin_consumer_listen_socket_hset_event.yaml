@@ -21,8 +21,8 @@ spec:
          args: ["cd $ADMIN_HOME; sh prepare_env.sh && python3.8 -u admin_listen_socket_event_hset_consumer.py"]
          resources:
            requests:
-             memory: 70Mi
-             cpu: 80m
+             memory: 30Mi
+             cpu: 20m
            limits:
              memory: 1Gi
              cpu: 500m

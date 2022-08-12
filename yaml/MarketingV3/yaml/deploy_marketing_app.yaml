@@ -21,8 +21,8 @@ spec:
           args: ["cd $MARKETING_HOME; sh prepare_env.sh && uwsgi --http :11060 --wsgi-file app_marketing_strategy.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
           resources:
             requests:
-              memory: 70Mi
-              cpu: 80m
+              memory: 30Mi
+              cpu: 20m
             limits:
               memory: 1Gi
               cpu: 500m

@@ -22,8 +22,8 @@ spec:
           args: ["cd $ADS_AUTOMATION_HOME; sh prepare_env.sh && python3.8 -u ads_collect_profile_complete_event_consumer.py"]
           resources:
             requests:
-              memory: 70Mi
-              cpu: 80m
+              memory: 30Mi
+              cpu: 20m
             limits:
               memory: 1Gi
               cpu: 500m

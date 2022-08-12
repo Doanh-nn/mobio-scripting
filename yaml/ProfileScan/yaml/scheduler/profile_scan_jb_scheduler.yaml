@@ -20,6 +20,13 @@ spec:
           image: {image}
           command: ["/bin/sh", "-c"]
           args: ["cd $PROFILE_SCAN_HOME; sh prepare_env.sh && python3.8 -u schedule_services.py profile-scan-jb-scheduler"]
+          resources:
+            requests:
+              memory: 30Mi
+              cpu: 20m
+            limits:
+              memory: 1Gi
+              cpu: 500m
           envFrom:
             - configMapRef:
                 name: mobio-config

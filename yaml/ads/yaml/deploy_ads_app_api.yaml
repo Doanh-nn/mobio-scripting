@@ -22,8 +22,8 @@ spec:
           args: ["cd $ADS_AUTOMATION_HOME; sh prepare_env.sh && python3.8 -u script_update_database.py && uwsgi --http :11010 --wsgi-file ads_automation.py --disable-logging --callable app --master --processes 1 -b 65536 --lazy --enable-threads"]
           resources:
             requests:
-              memory: 70Mi
-              cpu: 80m
+              memory: 30Mi
+              cpu: 20m
             limits:
               memory: 1Gi
               cpu: 500m

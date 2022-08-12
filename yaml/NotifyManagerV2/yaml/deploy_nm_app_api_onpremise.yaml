@@ -22,8 +22,8 @@ spec:
           args: ["cd $NOTIFY_MANAGER_V2; sh prepare_env.sh && uwsgi --http :11075 --wsgi-file nm_api_onpremise_app.py --callable app --master --processes 4 -b 65536 --lazy --enable-threads"]
           resources:
             requests:
-              memory: 70Mi
-              cpu: 80m
+              memory: 30Mi
+              cpu: 20m
             limits:
               memory: 1Gi
               cpu: 500m

@@ -21,8 +21,8 @@ spec:
           args: ["cd $TICKET_HOME; sh prepare_env.sh && python3.8 -u start_consumers.py record-event-change-data-ticket"]
           resources:
             requests:
-              memory: 70Mi
-              cpu: 80m
+              memory: 30Mi
+              cpu: 20m
             limits:
               memory: 1Gi
               cpu: 500m
