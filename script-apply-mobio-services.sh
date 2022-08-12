@@ -48,6 +48,7 @@ do
         new_image=$(sed "s|${REGISTRY_MOBIO_URI}|${VIB_REGISTRY_URI}|g" <<< "$image")
 
         echo "--- $folder ---"
+        echo "image: $new_image"
         add_node_selector $folder
         apply_deploy $folder $new_image
     fi
