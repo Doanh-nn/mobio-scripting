@@ -18,7 +18,7 @@ yaml/jb-waiter|registry.mobio.vn/jb-waiter:MASTER-10
 yaml/LandingPage|registry.mobio.vn/landingpage:MASTER-51
 yaml/loyalty|registry.mobio.vn/loyalty:MASTER-91-HOTFIX-3
 yaml/MarketingV3|registry.mobio.vn/marketingv3:MASTER-27-HOTFIX-5
-yaml/media|registry.mobio.vn/media:MASTER-41-HOTFIX-2
+yaml/media|registry.mobio.vn/media:MASTER-41-HOTFIX-4
 yaml/MerchantMCC|registry.mobio.vn/mcc-merchant:MASTER-3-HOTFIX-1
 yaml/mobio-report|registry.mobio.vn/mobio-report:MASTER-20-HOTFIX-5
 yaml/MobioTemplate|registry.mobio.vn/mobio-template:MASTER-13-HOTFIX-8
