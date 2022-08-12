@@ -34,7 +34,7 @@ data:
   KAFKA_BROKER: 'kafka1:9092,kafka2:9092,kafka3:9092'
   KAFKA_PORT: '9092'
   KAFKA_REPLICATION_FACTOR: '3'
-  ELASTIC_SEARCH_HOST: 'elasticsearch'
+  ELASTIC_SEARCH_HOST: 'elasticsearch1'
   ELASTIC_SEARCH_PORT: '9200'
   HOST_NAME: 'VIB'
   LAKE_DOMAIN: 'aet.mobio.vn'
