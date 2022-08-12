@@ -19,9 +19,18 @@ spec:
           image: {image}
           command: ["/bin/sh", "-c"]
           args: ["cd $AUDIENCE_HOME; sh prepare_env.sh && python3.8 -m uvicorn app_audience:app --host 0.0.0.0 --port 11021 --workers 4"]
+          resources:
+            requests:
+              memory: 70Mi
+              cpu: 80m
+            limits:
+              memory: 1Gi
+              cpu: 500m
           envFrom:
             - configMapRef:
                 name: mobio-config
+            - secretRef:
+                name: mobio-secret
           ports:
             - containerPort: 11021
           volumeMounts:
