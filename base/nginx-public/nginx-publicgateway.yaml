@@ -13,10 +13,13 @@ spec:
     spec:
       containers:
         - name: nginx-publicgateway-api
-          image: registry.mobio.vn/nginx-publicgateway:3.19.0-HOTFIX-4
+          image: {image}
           ports:
             - name: https
               containerPort: 443
+          envFrom:
+            - configMapRef:
+                name: mobio-config              
           volumeMounts:
             - name: mobio-public-shared-data
               mountPath: /media/data/public_resources/
