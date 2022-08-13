@@ -30,7 +30,7 @@ yaml/ProfileScan|registry.mobio.vn/profile-scan:MASTER-12-HOTFIX-2
 yaml/profiling_v4|registry.mobio.vn/profiling-v4:MASTER-145-HOTFIX-11
 yaml/Session-SocketIO|registry.mobio.vn/notify-socketio:MASTER-13
 yaml/social_listener|registry.mobio.vn/social-listener:MASTER-16-HOTFIX-9
-yaml/Social|registry.mobio.vn/social:MASTER-71-HOTFIX-1-5
+yaml/Social|registry.mobio.vn/social:MASTER-71-HOTFIX-1-7
 yaml/survey|registry.mobio.vn/survey:MASTER-34-HOTFIX-1
 yaml/Tag|registry.mobio.vn/tag:MASTER-14
 yaml/ticket|registry.mobio.vn/ticket:MASTER-34-HOTFIX-2
